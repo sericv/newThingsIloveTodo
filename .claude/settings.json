@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\huawei\\\\Desktop\\\\Projects\\\\Mine\\\\portfolio\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\huawei\\\\Desktop\\\\Projects\\\\Mine\\\\portfolio\\\\css\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\huawei\\\\Desktop\\\\Projects\\\\Mine\\\\portfolio\\\\js\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\huawei\\\\Desktop\\\\Projects\\\\Mine\\\\portfolio\\\\admin\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\huawei\\\\Desktop\\\\Projects\\\\Mine\\\\portfolio\\\\assets\\\\icons\")",
+      "Bash(node -e \"require\\('playwright'\\)\")",
+      "Bash(timeout 170 npx --yes playwright install chromium)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(node \"C:/Users/huawei/AppData/Local/Temp/screenshot_hero.js\")",
+      "Bash(python3 -m http.server 8123)",
+      "Bash(curl -sf http://localhost:8123/index.html)",
+      "Bash(python3 -m http.server 8124)",
+      "Bash(curl -sf http://localhost:8124/index.html)",
+      "Bash(curl -s http://localhost:8124/index.html)",
+      "Bash(netstat -ano)",
+      "Bash(npx --yes serve -l 5050 .)",
+      "Bash(curl -sf http://localhost:5050/index.html)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(node portfolio_check.mjs)",
+      "Bash(find / -name \"portfolio_check.mjs\" 2>/dev/null)",
+      "Read(//c//**)",
+      "Bash(cygpath -w /tmp/pwtest)",
+      "Bash(findstr :8083)",
+      "Bash(python -m http.server 8084)",
+      "Bash(node category_check.mjs)",
+      "Bash(findstr :8084)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\huawei\\AppData\\Local\\Temp",
+      "\\tmp\\pwtest",
+      "c:\\tmp\\pwtest"
+    ]
+  }
+}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="أرشيف رقمي شخصي — مشاريع، تصاميم، وتجارب إبداعية." />
+  <title>الأرشيف الرقمي</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════ -->
+  <header class="site-nav" id="site-nav" role="banner">
+    <div class="container nav-inner">
+      <!-- Logo / Name -->
+      <a href="#" class="nav-logo" id="nav-logo" aria-label="الرئيسية">
+        <span class="nav-logo-dot"></span>
+        <span class="nav-logo-text" id="nav-name">الأرشيف</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="nav-links" aria-label="التنقل الرئيسي">
+        <a href="#featured"   class="nav-link">الأعمال</a>
+        <a href="#categories" class="nav-link">التصنيفات</a>
+        <a href="#archive"    class="nav-link">الأرشيف</a>
+        <a href="#contact"    class="nav-link">التواصل</a>
+      </nav>
+
+      <!-- Search -->
+      <div class="nav-actions">
+        <button class="nav-search-btn" id="search-toggle-btn" aria-label="فتح البحث">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="nav-menu-btn" id="mobile-menu-btn" aria-label="فتح القائمة" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <nav class="mobile-nav-links">
+        <a href="#featured"   class="mobile-nav-link">الأعمال</a>
+        <a href="#categories" class="mobile-nav-link">التصنيفات</a>
+        <a href="#archive"    class="mobile-nav-link">الأرشيف</a>
+        <a href="#contact"    class="mobile-nav-link">التواصل</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="البحث" hidden>
+    <div class="search-overlay-backdrop" id="search-backdrop"></div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="search-input" class="search-input" placeholder="ابحث عن مشاريع، تصنيفات، وسوم…" autocomplete="off" aria-label="بحث" />
+        <button class="search-close-btn" id="search-close-btn" aria-label="إغلاق البحث">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ══════════════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════════════ -->
+    <section class="hero" id="hero">
+      <div class="container hero-inner">
+        <div class="hero-content">
+          <div class="hero-badge" id="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span id="hero-badge-text">متاح للمشاريع</span>
+          </div>
+
+          <h1 class="hero-title font-display" id="hero-title">
+            <span class="hero-title-line" id="hero-name-line">مرحباً، أنا —</span>
+            <span class="hero-title-accent hero-name-wrap">
+              <span id="hero-name">جاري التحميل…</span>
+              <svg class="hero-name-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M 4 14 C 60 22, 160 22, 220 10 C 250 4, 280 6, 296 12" pathLength="1" />
+              </svg>
+            </span>
+          </h1>
+
+          <p class="hero-tagline" id="hero-tagline">مصمم ومطور</p>
+          <p class="hero-bio" id="hero-bio">جاري تحميل الملف الشخصي…</p>
+
+          <div class="hero-cta">
+            <a href="#featured" class="btn btn-primary">عرض الأعمال</a>
+            <a href="#archive"  class="btn btn-ghost">تصفح الأرشيف</a>
+          </div>
+
+          <div class="hero-social" id="hero-social" aria-label="روابط التواصل الاجتماعي"></div>
+        </div>
+
+        <div class="hero-photo-wrap">
+          <div class="hero-photo-frame">
+            <img id="hero-photo" class="hero-photo" src="" alt="الصورة الشخصية" loading="eager" />
+            <div class="hero-photo-placeholder" id="hero-photo-placeholder" aria-hidden="true">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+          </div>
+          <div class="hero-photo-ring" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         FEATURED WORK
+    ══════════════════════════════════════════════════ -->
+    <section class="section featured-section" id="featured">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">أعمال مختارة</div>
+          <h2 class="section-title font-display">المشاريع المميزة</h2>
+          <p class="section-sub">مجموعة مختارة من أبرز أعمالي وأكثرها تأثيراً.</p>
+        </div>
+
+        <div class="featured-grid" id="featured-grid" aria-label="المشاريع المميزة">
+          <!-- Skeleton -->
+          <div class="project-card skeleton-card" aria-hidden="true"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text-sm"></div></div>
+          <div class="project-card skeleton-card" aria-hidden="true"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text-sm"></div></div>
+          <div class="project-card skeleton-card" aria-hidden="true"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text-sm"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CATEGORIES
+    ══════════════════════════════════════════════════ -->
+    <section class="section categories-section" id="categories">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">تصفح حسب النوع</div>
+          <h2 class="section-title font-display">التصنيفات</h2>
+          <p class="section-sub">استعرض الأعمال مصنّفةً حسب التخصص والنوع.</p>
+        </div>
+
+        <div class="categories-grid" id="categories-grid" aria-label="تصنيفات المشاريع">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         ARCHIVE
+    ══════════════════════════════════════════════════ -->
+    <section class="section archive-section" id="archive">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">جميع الأعمال</div>
+          <h2 class="section-title font-display">الأرشيف</h2>
+          <p class="section-sub">كل مشروع، تصميم، وتجربة — موثّقة بالتفصيل.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="archive-controls">
+          <div class="filter-tabs" id="filter-tabs" role="tablist" aria-label="تصفية حسب التصنيف">
+            <button class="filter-tab active" data-category="all" role="tab" aria-selected="true">الكل</button>
+          </div>
+        </div>
+
+        <div class="archive-grid" id="archive-grid" aria-label="جميع المشاريع">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="archive-empty" id="archive-empty" hidden>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <p>لم يتم العثور على مشاريع.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CONTACT
+    ══════════════════════════════════════════════════ -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <div class="contact-card">
+          <div class="contact-content">
+            <div class="section-label">تواصل معي</div>
+            <h2 class="section-title font-display">لنعمل معاً</h2>
+            <p class="contact-text" id="contact-text">مفتوح للتعاون والمشاريع والمحادثات.</p>
+            <a class="btn btn-primary contact-btn" id="contact-email-btn" href="#">أرسل رسالة</a>
+          </div>
+          <div class="contact-social" id="contact-social" aria-label="روابط التواصل الاجتماعي"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <span class="footer-name" id="footer-name">الأرشيف</span>
+      <span class="footer-copy">مبني بعناية واهتمام.</span>
+      <a href="admin/index.html" class="footer-admin-link" aria-label="لوحة التحكم">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════
+       PROJECT FULLSCREEN OVERLAY
+  ══════════════════════════════════════════════════ -->
+  <div class="project-overlay" id="project-overlay" role="dialog" aria-modal="true" aria-label="تفاصيل المشروع" hidden>
+    <div class="project-overlay-backdrop" id="project-backdrop"></div>
+    <div class="project-panel" id="project-panel">
+      <div class="project-panel-topbar">
+        <button class="project-close-btn" id="project-close-btn" aria-label="إغلاق المشروع">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          <span>إغلاق</span>
+        </button>
+      </div>
+
+      <div class="project-detail" id="project-detail">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Fullscreen Image Viewer ── -->
+  <div class="image-viewer" id="image-viewer" role="dialog" aria-modal="true" aria-label="عارض الصور" hidden>
+    <div class="image-viewer-backdrop" id="image-viewer-backdrop"></div>
+    <button class="image-viewer-close" id="image-viewer-close" aria-label="إغلاق">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="image-viewer-nav image-viewer-prev" id="image-viewer-prev" aria-label="السابق" hidden>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18 6-6-6-6"/></svg>
+    </button>
+    <button class="image-viewer-nav image-viewer-next" id="image-viewer-next" aria-label="التالي" hidden>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18-6-6 6-6"/></svg>
+    </button>
+    <div class="image-viewer-content">
+      <img id="image-viewer-img" class="image-viewer-img" src="" alt="صورة بالحجم الكامل" />
+    </div>
+    <div class="image-viewer-counter" id="image-viewer-counter"></div>
+  </div>
+
+  <!-- ── Toast Notifications ── -->
+  <div class="toast-container" id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ── Scripts ── -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

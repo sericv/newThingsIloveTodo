@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم — الأرشيف الرقمي</title>
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-body">
+
+  <!-- ── Auth Gate ── -->
+  <div class="auth-gate" id="auth-gate">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="nav-logo-dot"></span>
+        <span class="auth-logo-text">لوحة التحكم</span>
+      </div>
+      <h1 class="auth-title">تسجيل الدخول</h1>
+      <p class="auth-sub">الوصول إلى نظام إدارة المحتوى.</p>
+
+      <form id="login-form" class="auth-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="login-email">البريد الإلكتروني</label>
+          <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required autocomplete="email" />
+          <span class="form-error" id="login-email-error" aria-live="polite"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">كلمة المرور</label>
+          <div class="input-password-wrap">
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+            <button type="button" class="password-toggle" id="password-toggle" aria-label="إظهار كلمة المرور">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="form-error" id="login-pass-error" aria-live="polite"></span>
+        </div>
+        <div class="form-error-global" id="login-error" aria-live="assertive"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          <span id="login-btn-text">تسجيل الدخول</span>
+          <span class="btn-spinner" id="login-spinner" hidden></span>
+        </button>
+      </form>
+
+      <a href="../index.html" class="auth-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        العودة إلى الموقع
+      </a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       ADMIN SHELL
+  ══════════════════════════════════════════════════ -->
+  <div class="admin-shell" id="admin-shell" hidden>
+
+    <!-- ── Sidebar ── -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo">
+          <span class="nav-logo-dot"></span>
+          <span class="nav-logo-text">لوحة التحكم</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="تنقل لوحة التحكم">
+        <a class="sidebar-link active" data-section="dashboard" href="#" role="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          الرئيسية
+        </a>
+        <a class="sidebar-link" data-section="projects" href="#" role="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          المشاريع
+        </a>
+        <a class="sidebar-link" data-section="categories" href="#" role="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H2v7l6.29 6.29c.94.94 2.48.94 3.42 0l3.58-3.58c.94-.94.94-2.48 0-3.42L9 5Z"/><path d="M6 9.01V9"/></svg>
+          التصنيفات
+        </a>
+        <a class="sidebar-link" data-section="site-config" href="#" role="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          الملف الشخصي
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-link sidebar-logout" id="logout-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          تسجيل الخروج
+        </button>
+        <a href="../index.html" class="sidebar-link" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          عرض الموقع
+        </a>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="admin-main" id="admin-main">
+
+      <!-- ─── DASHBOARD ─── -->
+      <section class="admin-section active" id="section-dashboard">
+        <div class="admin-page-header">
+          <div>
+            <h1 class="admin-page-title">الرئيسية</h1>
+            <p class="admin-page-sub">نظرة عامة على المحتوى.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+            </div>
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-label">إجمالي المشاريع</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-success">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="stat-value" id="stat-published">—</div>
+            <div class="stat-label">منشور</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-warning">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="stat-value" id="stat-drafts">—</div>
+            <div class="stat-label">مسودة</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon-accent">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="stat-value" id="stat-featured">—</div>
+            <div class="stat-label">مميز</div>
+          </div>
+        </div>
+
+        <div class="dashboard-recent">
+          <div class="section-header-row">
+            <h2 class="admin-section-title">أحدث المشاريع</h2>
+            <button class="btn btn-ghost btn-sm" data-section="projects" id="view-all-projects">عرض الكل</button>
+          </div>
+          <div id="recent-projects-list"></div>
+        </div>
+      </section>
+
+      <!-- ─── PROJECTS ─── -->
+      <section class="admin-section" id="section-projects">
+        <div class="admin-page-header">
+          <div>
+            <h1 class="admin-page-title">المشاريع</h1>
+            <p class="admin-page-sub">إدارة جميع أعمالك.</p>
+          </div>
+          <div class="admin-page-actions">
+            <button class="btn btn-ghost" id="bulk-create-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+              إنشاء مشاريع بالجملة
+            </button>
+            <button class="btn btn-primary" id="new-project-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              مشروع جديد
+            </button>
+          </div>
+        </div>
+
+        <!-- Bulk Create Form -->
+        <div class="admin-form-panel" id="bulk-form-panel" hidden>
+          <div class="admin-form-header">
+            <h2 class="admin-form-title">إنشاء مشاريع بالجملة</h2>
+            <button class="icon-btn" id="bulk-form-close" aria-label="إغلاق النموذج">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <p class="form-hint" style="margin-bottom:var(--space-4)">
+            أدخل عنواناً وتصنيفاً واحداً، ثم اختر عدة صور — سيتم إنشاء مشروع منفصل لكل صورة بنفس العنوان والتصنيف والإعدادات.
+          </p>
+
+          <form id="bulk-form" class="admin-form" novalidate>
+            <div class="form-row">
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="bulk-title">العنوان <span class="required">*</span></label>
+                <input type="text" id="bulk-title" class="form-input" placeholder="مثال: تصوير منتجات" required />
+                <span class="form-error" id="bulk-title-error" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bulk-status">الحالة</label>
+                <select id="bulk-status" class="form-select">
+                  <option value="draft">مسودة</option>
+                  <option value="published">منشور</option>
+                  <option value="archived">مؤرشف</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="bulk-category">التصنيف</label>
+                <select id="bulk-category" class="form-select">
+                  <option value="">— اختر التصنيف —</option>
+                </select>
+              </div>
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="bulk-tags">الوسوم <span class="form-hint">(مفصولة بفاصلة)</span></label>
+                <input type="text" id="bulk-tags" class="form-input" placeholder="تصميم، ويب، واجهة مستخدم" />
+              </div>
+            </div>
+
+            <!-- Bulk Image Upload -->
+            <div class="form-group">
+              <label class="form-label">الصور <span class="required">*</span> <span class="form-hint">(سيتم إنشاء مشروع لكل صورة)</span></label>
+              <div class="image-upload-zone bulk-upload-zone" id="bulk-upload-zone">
+                <input type="file" id="bulk-file-input" class="sr-only" accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml" multiple aria-label="رفع صور المشاريع" />
+                <div class="image-upload-placeholder" id="bulk-upload-placeholder">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>انقر أو اسحب لرفع عدة صور دفعة واحدة</span>
+                  <small>PNG، JPG، WEBP، SVG · يمكن اختيار عدد كبير من الصور</small>
+                </div>
+              </div>
+              <div class="bulk-files-preview" id="bulk-files-preview"></div>
+              <span class="form-error" id="bulk-files-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Bulk Upload Progress -->
+            <div class="bulk-progress" id="bulk-progress" hidden>
+              <div class="bulk-progress-label">
+                <span id="bulk-progress-text">جاري رفع الصور…</span>
+                <span id="bulk-progress-percent">0%</span>
+              </div>
+              <div class="image-upload-progress">
+                <div class="progress-bar" id="bulk-progress-bar"></div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="bulk-form-cancel">إلغاء</button>
+              <button type="submit" class="btn btn-primary" id="bulk-save-btn">
+                <span id="bulk-save-text">إنشاء المشاريع</span>
+                <span class="btn-spinner" id="bulk-save-spinner" hidden></span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Project Form -->
+        <div class="admin-form-panel" id="project-form-panel" hidden>
+          <div class="admin-form-header">
+            <h2 class="admin-form-title" id="project-form-title">مشروع جديد</h2>
+            <button class="icon-btn" id="project-form-close" aria-label="إغلاق النموذج">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <form id="project-form" class="admin-form" novalidate>
+            <input type="hidden" id="project-id" />
+
+            <div class="form-row">
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="project-title">العنوان <span class="required">*</span></label>
+                <input type="text" id="project-title" class="form-input" placeholder="اسم المشروع" required />
+                <span class="form-error" id="project-title-error" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="project-status">الحالة</label>
+                <select id="project-status" class="form-select">
+                  <option value="draft">مسودة</option>
+                  <option value="published">منشور</option>
+                  <option value="archived">مؤرشف</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="project-category">التصنيف</label>
+                <select id="project-category" class="form-select">
+                  <option value="">— اختر التصنيف —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="project-date">التاريخ</label>
+                <input type="date" id="project-date" class="form-input" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="project-description">وصف مختصر</label>
+              <textarea id="project-description" class="form-textarea" rows="2" placeholder="ملخص قصير يظهر في البطاقات…"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="project-long-desc">الوصف الكامل</label>
+              <textarea id="project-long-desc" class="form-textarea" rows="4" placeholder="وصف تفصيلي يظهر في صفحة المشروع…"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="project-tags">الوسوم <span class="form-hint">(مفصولة بفاصلة)</span></label>
+              <input type="text" id="project-tags" class="form-input" placeholder="تصميم، ويب، واجهة مستخدم" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-toggle-group">
+                <label class="toggle-label">
+                  <input type="checkbox" id="project-featured" class="toggle-input" />
+                  <span class="toggle-track"></span>
+                  <span class="toggle-text">مميز</span>
+                </label>
+              </div>
+              <div class="form-group" id="featured-order-group">
+                <label class="form-label" for="project-featured-order">ترتيب التمييز</label>
+                <input type="number" id="project-featured-order" class="form-input" min="1" max="99" value="1" />
+              </div>
+            </div>
+
+            <!-- Cover Image -->
+            <div class="form-group">
+              <label class="form-label">صورة الغلاف</label>
+              <div class="image-upload-zone" id="cover-upload-zone" data-target="cover">
+                <input type="file" id="cover-file-input" class="sr-only" accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml" aria-label="رفع صورة الغلاف" />
+                <div class="image-upload-placeholder" id="cover-placeholder">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>انقر أو اسحب لرفع صورة الغلاف</span>
+                  <small>PNG، JPG، WEBP، SVG · أي نسبة عرض</small>
+                </div>
+                <div class="image-preview-wrap" id="cover-preview-wrap" hidden>
+                  <img id="cover-preview" class="image-preview" src="" alt="معاينة الغلاف" />
+                  <button type="button" class="image-remove-btn" data-target="cover" aria-label="إزالة صورة الغلاف">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+                <div class="image-upload-progress" id="cover-progress" hidden>
+                  <div class="progress-bar" id="cover-progress-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gallery Images -->
+            <div class="form-group">
+              <label class="form-label">صور المعرض</label>
+              <div class="gallery-upload-zone" id="gallery-upload-zone">
+                <input type="file" id="gallery-file-input" class="sr-only" accept="image/png,image/jpeg,image/jpg,image/webp,image/svg+xml" multiple aria-label="رفع صور المعرض" />
+                <button type="button" class="gallery-add-btn" id="gallery-add-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                  إضافة صور للمعرض
+                </button>
+              </div>
+              <div class="gallery-preview" id="gallery-preview"></div>
+            </div>
+
+            <!-- External Links -->
+            <div class="form-group">
+              <div class="form-label-row">
+                <label class="form-label">روابط خارجية</label>
+                <button type="button" class="btn btn-ghost btn-sm" id="add-link-btn">+ إضافة رابط</button>
+              </div>
+              <div id="links-container"></div>
+            </div>
+
+            <!-- Journey Sections -->
+            <div class="form-group">
+              <div class="form-label-row">
+                <label class="form-label">مراحل المشروع</label>
+                <button type="button" class="btn btn-ghost btn-sm" id="add-journey-btn">+ إضافة مرحلة</button>
+              </div>
+              <div id="journey-container"></div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="project-form-cancel">إلغاء</button>
+              <button type="submit" class="btn btn-primary" id="project-save-btn">
+                <span id="project-save-text">حفظ المشروع</span>
+                <span class="btn-spinner" id="project-save-spinner" hidden></span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Projects List -->
+        <div id="projects-list-wrap">
+          <div class="admin-list-controls">
+            <input type="search" id="projects-search" class="form-input" placeholder="بحث في المشاريع…" style="max-width:280px" aria-label="بحث في المشاريع" />
+            <select id="projects-filter-status" class="form-select" style="max-width:160px">
+              <option value="">جميع الحالات</option>
+              <option value="published">منشور</option>
+              <option value="draft">مسودة</option>
+              <option value="archived">مؤرشف</option>
+            </select>
+          </div>
+          <div id="projects-list"></div>
+        </div>
+      </section>
+
+      <!-- ─── CATEGORIES ─── -->
+      <section class="admin-section" id="section-categories">
+        <div class="admin-page-header">
+          <div>
+            <h1 class="admin-page-title">التصنيفات</h1>
+            <p class="admin-page-sub">تنظيم أعمالك حسب النوع.</p>
+          </div>
+          <button class="btn btn-primary" id="new-category-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            تصنيف جديد
+          </button>
+        </div>
+
+        <!-- Category Form -->
+        <div class="admin-form-panel" id="category-form-panel" hidden>
+          <div class="admin-form-header">
+            <h2 class="admin-form-title" id="category-form-title">تصنيف جديد</h2>
+            <button class="icon-btn" id="category-form-close" aria-label="إغلاق النموذج">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <form id="category-form" class="admin-form" novalidate>
+            <input type="hidden" id="category-id" />
+            <div class="form-row">
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="category-name">الاسم <span class="required">*</span></label>
+                <input type="text" id="category-name" class="form-input" placeholder="تصميم الويب" required />
+                <span class="form-error" id="category-name-error" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="category-order">الترتيب</label>
+                <input type="number" id="category-order" class="form-input" min="1" max="99" value="1" style="max-width:100px" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="category-description">الوصف</label>
+              <input type="text" id="category-description" class="form-input" placeholder="وصف مختصر…" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" id="category-form-cancel">إلغاء</button>
+              <button type="submit" class="btn btn-primary" id="category-save-btn">
+                <span id="category-save-text">حفظ التصنيف</span>
+                <span class="btn-spinner" id="category-save-spinner" hidden></span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="categories-list"></div>
+      </section>
+
+      <!-- ─── SITE CONFIG ─── -->
+      <section class="admin-section" id="section-site-config">
+        <div class="admin-page-header">
+          <div>
+            <h1 class="admin-page-title">الملف الشخصي والإعدادات</h1>
+            <p class="admin-page-sub">إدارة معلوماتك الشخصية ومحتوى الموقع.</p>
+          </div>
+        </div>
+
+        <form id="site-config-form" class="admin-form" novalidate>
+          <div class="form-card">
+            <h2 class="form-card-title">المعلومات الشخصية</h2>
+
+            <div class="form-row">
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="config-name">الاسم الكامل <span class="required">*</span></label>
+                <input type="text" id="config-name" class="form-input" placeholder="اسمك" required />
+              </div>
+              <div class="form-group form-group-grow">
+                <label class="form-label" for="config-title">المسمى المهني</label>
+                <input type="text" id="config-title" class="form-input" placeholder="مصمم ومطور" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="config-bio">نبذة تعريفية</label>
+              <textarea id="config-bio" class="form-textarea" rows="3" placeholder="نبذة مختصرة عنك…"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="config-email">بريد التواصل</label>
+              <input type="email" id="config-email" class="form-input" placeholder="you@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">الصورة الشخصية</label>
+              <div class="image-upload-zone" id="photo-upload-zone" data-target="photo">
+                <input type="file" id="photo-file-input" class="sr-only" accept="image/png,image/jpeg,image/jpg,image/webp" aria-label="رفع الصورة الشخصية" />
+                <div class="image-upload-placeholder" id="photo-placeholder">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>رفع صورة شخصية</span>
+                </div>
+                <div class="image-preview-wrap profile-preview-wrap" id="photo-preview-wrap" hidden>
+                  <img id="photo-preview" class="image-preview profile-photo-preview" src="" alt="معاينة الصورة الشخصية" />
+                  <button type="button" class="image-remove-btn" data-target="photo" aria-label="إزالة الصورة">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h2 class="form-card-title">روابط التواصل الاجتماعي</h2>
+            <div id="social-links-container"></div>
+            <button type="button" class="btn btn-ghost btn-sm" id="add-social-btn">+ إضافة رابط</button>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="config-save-btn">
+              <span id="config-save-text">حفظ التغييرات</span>
+              <span class="btn-spinner" id="config-save-spinner" hidden></span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── Delete Confirm Modal ── -->
+  <div class="modal-overlay" id="delete-modal" hidden role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+    <div class="modal">
+      <h2 class="modal-title" id="delete-modal-title">حذف العنصر</h2>
+      <p class="modal-text" id="delete-modal-text">هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="delete-cancel">إلغاء</button>
+        <button class="btn btn-danger" id="delete-confirm">
+          <span id="delete-confirm-text">حذف</span>
+          <span class="btn-spinner" id="delete-spinner" hidden></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

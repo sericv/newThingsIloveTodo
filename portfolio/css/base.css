@@ -1,0 +1,159 @@
+/* ============================================================
+   BASE STYLES — Reset, Typography, Global Utilities
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-zinc-300); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-zinc-400); }
+
+/* ── Selection ── */
+::selection {
+  background: var(--color-indigo-100);
+  color: var(--color-indigo-900);
+}
+
+/* ── Focus ── */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Images ── */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Links ── */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Buttons ── */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+/* ── Lists ── */
+ul, ol { list-style: none; }
+
+/* ── Form Elements ── */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ── Typography Helpers ── */
+.font-display   { font-family: var(--font-display); }
+.font-mono      { font-family: var(--font-mono); }
+
+.text-xs    { font-size: var(--text-xs); }
+.text-sm    { font-size: var(--text-sm); }
+.text-base  { font-size: var(--text-base); }
+.text-lg    { font-size: var(--text-lg); }
+.text-xl    { font-size: var(--text-xl); }
+.text-2xl   { font-size: var(--text-2xl); }
+.text-3xl   { font-size: var(--text-3xl); }
+.text-4xl   { font-size: var(--text-4xl); }
+.text-5xl   { font-size: var(--text-5xl); }
+.text-6xl   { font-size: var(--text-6xl); }
+
+.weight-medium   { font-weight: var(--weight-medium); }
+.weight-semibold { font-weight: var(--weight-semibold); }
+.weight-bold     { font-weight: var(--weight-bold); }
+
+.text-primary   { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary  { color: var(--color-text-tertiary); }
+.text-accent    { color: var(--color-primary); }
+
+.leading-tight   { line-height: var(--leading-tight); }
+.leading-snug    { line-height: var(--leading-snug); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+.tracking-tight  { letter-spacing: var(--tracking-tight); }
+
+/* ── Layout Helpers ── */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+@media (min-width: 1280px) {
+  .container { padding-left: var(--space-8); padding-right: var(--space-8); }
+}
+
+.section {
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
+}
+
+@media (min-width: 768px) {
+  .section { padding-top: var(--space-24); padding-bottom: var(--space-24); }
+}
+
+/* ── Flex/Grid Shortcuts ── */
+.flex     { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center  { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-2  { gap: var(--space-2); }
+.gap-3  { gap: var(--space-3); }
+.gap-4  { gap: var(--space-4); }
+.gap-6  { gap: var(--space-6); }
+.gap-8  { gap: var(--space-8); }
+
+/* ── Visibility ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
