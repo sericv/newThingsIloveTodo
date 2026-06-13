@@ -452,9 +452,14 @@ function addJourneySection(data = {}) {
   state.journeyCount++;
   const num = state.journeyCount;
 
+  /* Images for this stage live on the element itself — supports multiple per stage.
+     Falls back to the legacy single `image` field for older projects. */
+  const images = (data.gallery && data.gallery.length) ? [...data.gallery] : (data.image ? [data.image] : []);
+
   const div = document.createElement('div');
   div.className = 'journey-section-admin';
   div.dataset.journeyId = id;
+  div._journeyImages = images;
   div.innerHTML = `
     <div class="journey-section-header">
       <span class="journey-section-number">المرحلة ${num}</span>
@@ -474,67 +479,74 @@ function addJourneySection(data = {}) {
         <textarea class="form-textarea journey-desc-input" rows="3" placeholder="ماذا حدث في هذه المرحلة…">${escHtml(data.description || '')}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">صورة</label>
-        <div class="image-upload-zone journey-image-zone" data-journey-id="${id}">
-          <input type="file" class="sr-only journey-image-input" accept="image/*" aria-label="رفع صورة المرحلة" />
+        <label class="form-label">صور المرحلة</label>
+        <div class="image-upload-zone bulk-upload-zone journey-images-zone" data-journey-id="${id}">
+          <input type="file" class="sr-only journey-images-input" accept="image/*" multiple aria-label="رفع صور المرحلة" />
           <div class="image-upload-placeholder">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <span>إضافة صورة</span>
-          </div>
-          <div class="image-preview-wrap" hidden>
-            <img class="journey-section-img-preview image-preview" src="${data.image || ''}" alt="" />
-            <button type="button" class="image-remove-btn journey-img-remove" aria-label="إزالة">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
+            <span>إضافة صور (يمكن اختيار أكثر من صورة)</span>
           </div>
         </div>
+        <div class="bulk-files-grid journey-images-grid"></div>
       </div>
-      <input type="hidden" class="journey-image-data" value="${escHtml(data.image || '')}" />
       <input type="hidden" class="journey-order-data" value="${data.order || num}" />
     </div>
   `;
 
-  if (data.image) {
-    const previewWrap = div.querySelector('.image-preview-wrap');
-    const placeholder = div.querySelector('.image-upload-placeholder');
-    if (previewWrap) previewWrap.hidden = false;
-    if (placeholder) placeholder.style.display = 'none';
+  const zone  = div.querySelector('.journey-images-zone');
+  const input = div.querySelector('.journey-images-input');
+
+  function renderJourneyImages() {
+    const grid = div.querySelector('.journey-images-grid');
+    if (!grid) return;
+    grid.innerHTML = div._journeyImages.map((img, i) => `
+      <div class="bulk-file-thumb-wrap">
+        <img class="bulk-file-thumb" src="${img}" alt="صورة المرحلة ${i + 1}" loading="lazy" />
+        <button type="button" class="gallery-thumb-remove" data-index="${i}" aria-label="إزالة الصورة ${i + 1}">×</button>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.gallery-thumb-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        div._journeyImages.splice(parseInt(btn.dataset.index), 1);
+        renderJourneyImages();
+      });
+    });
   }
 
-  const zone     = div.querySelector('.journey-image-zone');
-  const input    = div.querySelector('.journey-image-input');
-  const removeBtn = div.querySelector('.journey-img-remove');
+  async function addJourneyFiles(fileList) {
+    const files = Array.from(fileList || []).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
 
-  zone?.addEventListener('click', () => input?.click());
-  input?.addEventListener('change', async ev => {
-    const file = ev.target.files?.[0];
-    if (!file) return;
-    ev.target.value = '';
+    showToast('جاري رفع الصور…', 'default');
+
     try {
-      const url = await uploadToCloudinary(file, 'journey');
-      div.querySelector('.journey-image-data').value = url;
-      const previewWrap = div.querySelector('.image-preview-wrap');
-      const previewImg  = div.querySelector('.journey-section-img-preview');
-      const placeholder = div.querySelector('.image-upload-placeholder');
-      if (previewImg)  previewImg.src = url;
-      if (previewWrap) previewWrap.hidden = false;
-      if (placeholder) placeholder.style.display = 'none';
+      const urls = await uploadManyToCloudinary(files, 'journey');
+      div._journeyImages.push(...urls);
+      renderJourneyImages();
     } catch (err) {
       console.error(err);
-      showToast('فشل رفع صورة المرحلة.', 'error');
+      showToast('تعذّر رفع بعض الصور.', 'error');
     }
+  }
+
+  zone?.addEventListener('click', () => input?.click());
+  input?.addEventListener('change', e => {
+    addJourneyFiles(e.target.files);
+    e.target.value = '';
   });
 
-  removeBtn?.addEventListener('click', () => {
-    div.querySelector('.journey-image-data').value = '';
-    const previewWrap = div.querySelector('.image-preview-wrap');
-    const placeholder = div.querySelector('.image-upload-placeholder');
-    if (previewWrap) previewWrap.hidden = true;
-    if (placeholder) placeholder.style.display = '';
+  zone?.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone?.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone?.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    addJourneyFiles(e.dataTransfer?.files);
   });
 
   div.querySelector('.journey-remove-btn')?.addEventListener('click', () => div.remove());
 
+  renderJourneyImages();
   container.appendChild(div);
 }
 
@@ -551,8 +563,7 @@ function collectJourney() {
     id:          div.dataset.journeyId,
     title:       div.querySelector('.journey-title-input')?.value.trim() || '',
     description: div.querySelector('.journey-desc-input')?.value.trim() || '',
-    image:       div.querySelector('.journey-image-data')?.value || '',
-    gallery:     [],
+    gallery:     [...(div._journeyImages || [])],
     order:       i + 1,
   }));
 }

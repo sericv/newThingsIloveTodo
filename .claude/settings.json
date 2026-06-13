@@ -26,7 +26,12 @@
       "Bash(findstr :8083)",
       "Bash(python -m http.server 8084)",
       "Bash(node category_check.mjs)",
-      "Bash(findstr :8084)"
+      "Bash(findstr :8084)",
+      "Bash(python -m http.server 8085)",
+      "Bash(node journey_check.mjs)",
+      "Bash(node journey_check2.mjs)",
+      "Bash(node journey_debug.mjs)",
+      "Bash(node journey_check3.mjs)"
     ],
     "additionalDirectories": [
       "C:\\Users\\huawei\\AppData\\Local\\Temp",

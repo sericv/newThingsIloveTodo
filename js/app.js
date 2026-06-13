@@ -426,7 +426,7 @@ function renderProjectDetail(project, container) {
          <div class="project-journey-label">مراحل المشروع</div>
          ${(project.journey || [])
            .sort((a, b) => (a.order || 0) - (b.order || 0))
-           .map((section, i, arr) => buildJourneySection(section, i === arr.length - 1))
+           .map((section, i) => buildJourneySection(section, i))
            .join('')}
        </div>`
     : '';
@@ -478,10 +478,17 @@ function renderProjectDetail(project, container) {
     img.addEventListener('click', () => openImageViewer(gallerySrcs, idx));
   });
 
-  /* Journey images */
-  container.querySelectorAll('.journey-image, .journey-gallery-img').forEach(img => {
-    img.addEventListener('click', () => openImageViewer([img.src], 0));
+  /* Journey images — each stage opens the viewer scoped to its own gallery */
+  container.querySelectorAll('.journey-media').forEach(media => {
+    const imgs = Array.from(media.querySelectorAll('.journey-media-img'));
+    const srcs = imgs.map(img => img.src);
+    imgs.forEach((img, idx) => {
+      img.addEventListener('click', () => openImageViewer(srcs, idx));
+    });
   });
+
+  /* Reveal animation for journey stages */
+  revealItems(container.querySelectorAll('.journey-section'));
 
   /* Portrait detection for gallery images */
   galleryElements.forEach(img => {
@@ -492,31 +499,33 @@ function renderProjectDetail(project, container) {
   });
 }
 
-function buildJourneySection(section, isLast) {
-  const imgHtml = section.image
-    ? `<img class="journey-image" src="${section.image}" alt="${escHtml(section.title || 'صورة المرحلة')}" loading="lazy" />`
-    : '';
+function buildJourneySection(section, index) {
+  /* Gallery is the source of truth; fall back to legacy single `image` field */
+  const images = (section.gallery && section.gallery.length)
+    ? section.gallery
+    : (section.image ? [section.image] : []);
 
-  const galleryHtml = (section.gallery || []).length
-    ? `<div class="journey-gallery">
-         ${section.gallery.map(img =>
-           `<img class="journey-gallery-img" src="${img}" alt="صورة المرحلة" loading="lazy" />`
+  const reverseClass = index % 2 === 1 ? ' journey-reverse' : '';
+  const revealDelay = ` reveal reveal-delay-${Math.min(index + 1, 5)}`;
+
+  const mediaHtml = images.length
+    ? `<div class="journey-media${images.length === 1 ? ' journey-media-single' : ''}">
+         ${images.map((img, i) =>
+           `<div class="journey-media-item">
+              <img class="journey-media-img" src="${img}" alt="${escHtml(section.title || 'صورة المرحلة')} ${i + 1}" loading="lazy" />
+            </div>`
          ).join('')}
        </div>`
     : '';
 
   return `
-    <div class="journey-section">
-      <div class="journey-timeline">
-        <div class="journey-dot"></div>
-        ${!isLast ? '<div class="journey-line"></div>' : ''}
-      </div>
+    <div class="journey-section${reverseClass}${revealDelay}">
       <div class="journey-content">
+        <div class="journey-number">${String(index + 1).padStart(2, '0')}</div>
         <h3 class="journey-title">${escHtml(section.title || '')}</h3>
         <p class="journey-desc">${escHtml(section.description || '')}</p>
-        ${imgHtml}
-        ${galleryHtml}
       </div>
+      ${mediaHtml}
     </div>
   `;
 }
